@@ -206,13 +206,17 @@ var rootCmd = &cobra.Command{
 				filename, len(unsentGroups), len(unsentIndividualTxs))
 			flattenUnsentGroups := flattenGroupsMap(unsentGroups)
 			allUnsent := append(flattenUnsentGroups, unsentIndividualTxs...)
-			unsentFilename := fmt.Sprintf("%s.unsent", filename)
-			err = writeTxsToFile(unsentFilename, allUnsent)
-			if err != nil {
-				log.Error(err)
-				return
+			if len(allUnsent) != 0 {
+				unsentFilename := fmt.Sprintf("%s.unsent", filename)
+				err = writeTxsToFile(unsentFilename, allUnsent)
+				if err != nil {
+					log.Error(err)
+					return
+				}
+				log.Infof("wrote unsent transactions to %s", unsentFilename)
+			} else {
+				log.Infof("no unsent transaction were found!")
 			}
-			log.Infof("wrote unsent transactions to %s", unsentFilename)
 		}
 	},
 }
